@@ -44,7 +44,7 @@ npm run start
 You can create your own promotional configurations using [Dashboard](https://app.voucherify.io/#/login), about which you can also read [here](https://docs.voucherify.io/docs/quickstart). Thanks to this tool, you can create campaigns, generate promotional codes, check statistics using Sandbox Project and many other functionalities that are waiting for you after creating a trial account for 30 days.
 
 ## Coupon examples
-``BLCKFRDY`` ``HAPPY-ORDERxq7``
+``BLCKFRDY`` ``HAPPY-ORDERxq7`` ``HAPPY-ORDERyra`` ``HAPPY-ORDER11T``
 
 If you want to create more sample coupons, please go to your Dashboard.
 
