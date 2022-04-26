@@ -23,6 +23,7 @@
     ]
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node server.js"
   }
 }
