@@ -1,15 +1,15 @@
 require('dotenv').config();
 const { VoucherifyServerSide } = require('@voucherify/sdk');
+const path = require('path');
+const express = require("express");
+const bodyParser = require('body-parser');
+const app = express();
 
 const client = VoucherifyServerSide({
   applicationId: `${process.env.VOUCHERIFY_APP_ID}`,
   secretKey: `${process.env.VOUCHERIFY_SECRET_KEY}`,
   // apiUrl: 'https://<region>.api.voucherify.io'
 })
-
-const express = require("express");
-const bodyParser = require('body-parser');
-const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +24,8 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(process.cwd() + '/index.html');
+  console.log('Requested homepage')
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 
