@@ -91,6 +91,8 @@ app.post("/redeem-voucher", (req, res) => {
     })
 });
 
-app.listen(3000, () => {
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
   console.log(`Hot beans app listening on port 3000`);
 });
