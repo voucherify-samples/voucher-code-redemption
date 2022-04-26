@@ -1,15 +1,15 @@
-require('dotenv').config();
-const { VoucherifyServerSide } = require('@voucherify/sdk');
-const path = require('path');
+require("dotenv").config();
+const { VoucherifyServerSide } = require("@voucherify/sdk");
+const path = require("path");
 const express = require("express");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const app = express();
 
 const client = VoucherifyServerSide({
   applicationId: `${process.env.VOUCHERIFY_APP_ID}`,
   secretKey: `${process.env.VOUCHERIFY_SECRET_KEY}`,
   // apiUrl: 'https://<region>.api.voucherify.io'
-})
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,8 +24,8 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  console.log('Requested homepage')
-  res.sendFile(path.join(__dirname, '../client/index.html'));
+  console.log("Requested homepage");
+  res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
 
@@ -45,20 +45,20 @@ app.post("/validate-voucher", (req, res) => {
           message: "Voucher granted",
           amount: response.discount.amount_off,
           campaign: response.campaign ? response.campaign : null
-        })
+        });
       } else {
         res.status(404).send({
           status: "error",
           message: "Voucher incorrect"
-        })
+        });
       }
     })
-    .catch((error) => {
+    .catch(error => {
       res.status(400).send({
         status: "error",
         message: "Voucher not found"
-      })
-    })
+      });
+    });
 });
 
 app.post("/redeem-voucher", (req, res) => {
@@ -76,7 +76,7 @@ app.post("/redeem-voucher", (req, res) => {
           message: "Voucher granted",
           amount: response.voucher.discount.amount_off,
           campaign: response.voucher.campaign ? response.voucher.campaign : null
-        })
+        });
       } else {
         res.status(400).send({
           status: "error",
@@ -84,16 +84,16 @@ app.post("/redeem-voucher", (req, res) => {
         });
       }
     })
-    .catch((error) => {
+    .catch(error => {
       res.status(404).send({
         status: "error",
         message: "Voucher incorrect"
       });
-    })
+    });
 });
 
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-  console.log(`Hot beans app listening on port 3000`);
+  console.log("Hot beans app listening on port 3000");
 });

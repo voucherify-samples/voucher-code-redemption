@@ -64,39 +64,39 @@ window.addEventListener("load", () => {
                      </div>`
       )
       .join("")}`;
-  }
+  };
   summaryInnerText();
 
   const incrementQuantity = () => {
-    const incrementButtons = document.querySelectorAll('.increment');
-    const incrementInput = document.querySelectorAll('.increment-input');
+    const incrementButtons = document.querySelectorAll(".increment");
+    const incrementInput = document.querySelectorAll(".increment-input");
     incrementButtons.forEach((button, index) => {
-      button.addEventListener('click', () => {
+      button.addEventListener("click", () => {
         items[index].quantity = items[index].quantity + 1;
         incrementInput[index].value = items[index].quantity;
         summaryPrices();
-      })
-    })
-  }
+      });
+    });
+  };
   incrementQuantity();
 
   const decrementQuantity = () => {
-    const decrementButtons = document.querySelectorAll('.decrement');
-    const incrementInput = document.querySelectorAll('.increment-input');
+    const decrementButtons = document.querySelectorAll(".decrement");
+    const incrementInput = document.querySelectorAll(".increment-input");
     decrementButtons.forEach((button, index) => {
-      button.addEventListener('click', () => {
-        if (items[index].quantity < 1) return;
+      button.addEventListener("click", () => {
+        if (items[index].quantity < 1) { return; }
         items[index].quantity = items[index].quantity - 1;
         incrementInput[index].value = items[index].quantity;
         summaryPrices();
-      })
-    })
-  }
+      });
+    });
+  };
   decrementQuantity();
 
   function addProductPrices(items) {
     return items
-      .map((item) => {
+      .map(item => {
         return parseFloat(item.price) * parseInt(item.quantity);
       })
       .reduce((partialSum, a) => partialSum + a, 0)
@@ -108,7 +108,7 @@ window.addEventListener("load", () => {
     subtotal.innerHTML = `$${summedUpPrices}`;
     grandTotal = summedUpPrices - promotions;
     grandTotalSpan.innerHTML = `$${grandTotal.toFixed(2)}`;
-  }
+  };
 
   voucherValue.addEventListener("input", () => {
     if (voucherValue.value === "") {
@@ -119,18 +119,18 @@ window.addEventListener("load", () => {
     }
   });
 
-  const validateCode = async (voucherCode) => {
+  const validateCode = async voucherCode => {
     if (items.reduce((a, b) => a + b.quantity, 0) === 0) {
-      promotionHolder.innerHTML = `<h5 id="error-message">No items in basket</h5>`;
+      promotionHolder.innerHTML = "<h5 id=\"error-message\">No items in basket</h5>";
 
       return false;
     }
     if (!voucherCode) {
-      promotionHolder.innerHTML = `<h5 id="error-message">Please enter voucher code</h5>`;
+      promotionHolder.innerHTML = "<h5 id=\"error-message\">Please enter voucher code</h5>";
       return false;
     }
 
-    const response = await fetch(`/validate-voucher`, {
+    const response = await fetch("/validate-voucher", {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -149,20 +149,20 @@ window.addEventListener("load", () => {
     if (response.status === 400) {
       return Promise.reject(data);
     }
-  }
+  };
 
-  const redeemCode = async (voucherCode) => {
+  const redeemCode = async voucherCode => {
     if (items.reduce((a, b) => a + b.quantity, 0) === 0) {
-      promotionHolder.innerHTML = `<h5 id="error-message">No items in basket</h5>`;
+      promotionHolder.innerHTML = "<h5 id=\"error-message\">No items in basket</h5>";
       return false;
     }
 
     if (!voucherCode) {
-      promotionHolder.innerHTML = `<h5 id="error-message">Please enter voucher code</h5>`;
+      promotionHolder.innerHTML = "<h5 id=\"error-message\">Please enter voucher code</h5>";
       return false;
     }
 
-    const response = await fetch(`/redeem-voucher`, {
+    const response = await fetch("/redeem-voucher", {
       method: "POST",
       headers: {
         //prettier-ignore
@@ -184,41 +184,41 @@ window.addEventListener("load", () => {
     if (response.status === 400) {
       return Promise.reject(data);
     }
-  }
+  };
 
-  const summedPricesAfterValidate = (result) => {
+  const summedPricesAfterValidate = result => {
     promotions = result.amount / 100;
-            grandTotal = addProductPrices(items) - promotions;
-            grandTotalSpan.innerHTML = `$${grandTotal.toFixed(2)}`;
-            allDiscountsSpan.innerHTML = `-$${promotions.toFixed(2)}`;
-            promotionHolder.innerHTML = `<h5>${result.campaign ? result.campaign : ''
-              }<span>-${promotions.toFixed(2)}$ OFF</span></h5>
+    grandTotal = addProductPrices(items) - promotions;
+    grandTotalSpan.innerHTML = `$${grandTotal.toFixed(2)}`;
+    allDiscountsSpan.innerHTML = `-$${promotions.toFixed(2)}`;
+    promotionHolder.innerHTML = `<h5>${result.campaign ? result.campaign : ""
+      }<span>-${promotions.toFixed(2)}$ OFF</span></h5>
             <span>-$${promotions.toFixed(2)}</span>`;
-  }
+  };
 
   checkoutButton.addEventListener("click", () => {
     redeemCode(voucherValue.value)
       .then(
-        (result) => {
+        result => {
           if (result.amount) {
-            checkoutButton.innerHTML = `<p>Thank you!</p>`;
+            checkoutButton.innerHTML = "<p>Thank you!</p>";
             summedPricesAfterValidate(result);
           }
         }
       ).catch(error => {
         promotionHolder.innerHTML = `<h5 id="error-message">${error.message}</h5>`;
-      })
+      });
   });
 
   buttonValidateCode.addEventListener("click", () => {
     validateCode(voucherValue.value).then(
-      (result) => {
+      result => {
         if (result.amount) {
           summedPricesAfterValidate(result);
         }
       }
     ).catch(error => {
       promotionHolder.innerHTML = `<h5 id=error-message">${error.message}</h5>`;
-    })
+    });
   });
 });
