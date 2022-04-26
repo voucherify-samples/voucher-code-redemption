@@ -14,7 +14,7 @@ const client = VoucherifyServerSide({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static('../client'));
+app.use(express.static(path.join(__dirname, "../client")));
 
 app.use((req, res, next) => {
   res.append("Access-Control-Allow-Origin", ["*"]);
