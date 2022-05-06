@@ -1,33 +1,33 @@
 # Redeem promo codes with Voucherify
 
 
-This sample shows you how to integrate with Voucherify voucher redemption endpoint.
+This sample shows you how to integrate with Voucherify [voucher redemption endpoint](https://docs.voucherify.io/reference/redeem-voucher).
 
 Validating and accepting promo codes in your checkout from scratch might be tricky — calculating discounted prices, error message handling, and localization are just a few things to think about when building a simple promo code redemption flow.
 
-This is where Voucherify promotion engine kicks in. Together with our Promo UI Kit you can quickly build the best promotion experience for your customers.
+This is where [Voucherify promotion engine](https://docs.voucherify.io/docs) kicks in. Together with our [Promo UI Kit](https://www.figma.com/community/file/1100356622702326488) you can quickly build the best promotion experience for your customers.
 
 ## Demo
 
-Live demo
+[Live demo](https://voucherify-code-redemption.herokuapp.com/)
 
 ![](https://github.com/voucherify-samples/voucher-code-redemption/blob/main/voucherify-demo.gif)
 
-The demo is running with a Sandbox project. Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
+The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/testing). Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
 
 ``BLCKFRDY`` ``HAPPY-ORDERxq7`` ``HAPPY-ORDERyra`` ``HAPPY-ORDER11T``
 
-The promo code box accepts Amount and Percentage discount types, more coming soon. 
+The promo code box accepts Amount and Percentage [discount types](https://docs.voucherify.io/docs/vouchers-1#discount-coupons), more coming soon. 
 
 This sample calls two endpoints:
-Validate voucher code — checks the code against validation rules and returns calculated discounts
-Redeem voucher code — runs validation and then marks the voucher as used
+[Validate voucher code](https://docs.voucherify.io/reference/validate-voucher) — checks the code against [validation rules](https://docs.voucherify.io/docs/validation-rules) and returns calculated discounts
+[Redeem voucher code](https://docs.voucherify.io/reference/redeem-voucher) — runs validation and then marks the voucher as used
 
 
 
 ## How to run Voucherify samples locally?
 
-This sample is built with Node.js and our JS SDK on the server side and HTML + Vanilla JavaScript on the front (with React version coming soon).
+This sample is built with Node.js and our [JS SDK](https://github.com/voucherifyio/voucherify-js-sdk) on the server side and HTML + Vanilla JavaScript on the front (with React version coming soon).
 
 Follow the steps below to run locally.
 
@@ -36,9 +36,9 @@ Follow the steps below to run locally.
 ```
 git clone https://github.com/voucherify-samples/voucher-code-redemption.git
 ```
-2. Create your Voucherify account (free tier, no credit card required).
+2. Create your [Voucherify account](http://app.voucherify.io/#/signup) (free tier, no credit card required).
 
-3. Go to the Sandbox project’s settings and get your Application ID and Secret Key, see Authentication.
+3. Go to the Sandbox project’s settings and get your Application ID and Secret Key, see [Authentication](https://docs.voucherify.io/docs/authentication).
 
 4. Rename .env.example to .env and paste your API keys:
 ```
@@ -61,10 +61,10 @@ npm run start
 If you found a bug or want to suggest a new sample, please file an issue.
 
 If you have questions, comments, or need help with code, we’re here to help:
-on [Slack](https://www.voucherify.io/community)
-by email
+* on [Slack](https://www.voucherify.io/community)
+* by [email](https://www.voucherify.io/contact-support)
 
-For more tutorials and full API reference, visit our Developer Hub.
+For more tutorials and full API reference, visit our [Developer Hub](https://docs.voucherify.io).
 
 ## Authors
 [@patricioo1](https://github.com/patricioo1)
