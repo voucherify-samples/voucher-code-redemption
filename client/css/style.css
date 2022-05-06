@@ -248,6 +248,25 @@ input::-webkit-inner-spin-button {
   line-height: 24px;
 }
 
+.voucher-examples {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-style: italic;
+  height: 50px;
+  gap: 0 10px;
+  color: gray;
+}
+
+.voucher-examples span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #bfc5db; */
+  border-radius: 4px;
+  padding: 3px 0px;
+}
+
 .voucher-input-and-button-holder {
   display: flex;
   flex-direction: row;
