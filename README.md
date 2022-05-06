@@ -1,61 +1,70 @@
-# Voucherify API Samples
-## Voucher code redemption
+# Redeem promo codes with Voucherify
 
-Voucherify examples allow you to see and inspire you how to use Voucherify API to build your own promotional configurations.
 
-To see all the possibilities offered by the Voucherify product, go [here](https://docs.voucherify.io/docs/redemption).
+This sample shows you how to integrate with Voucherify voucher redemption endpoint.
 
-If you want to read all the documentation regarding Voucherify, click [here](https://docs.voucherify.io/docs).
+Validating and accepting promo codes in your checkout from scratch might be tricky — calculating discounted prices, error message handling, and localization are just a few things to think about when building a simple promo code redemption flow.
+
+This is where Voucherify promotion engine kicks in. Together with our Promo UI Kit you can quickly build the best promotion experience for your customers.
+
+## Demo
+
+Live demo
 
 ![](https://github.com/voucherify-samples/voucher-code-redemption/blob/main/voucherify-demo.gif)
 
-See the sample of the integration [live](https://voucher-code-redemption.herokuapp.com/).
+The demo is running with a Sandbox project. Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
+
+``BLCKFRDY`` ``HAPPY-ORDERxq7`` ``HAPPY-ORDERyra`` ``HAPPY-ORDER11T``
+
+The promo code box accepts Amount and Percentage discount types, more coming soon. 
+
+This sample calls two endpoints:
+Validate voucher code — checks the code against validation rules and returns calculated discounts
+Redeem voucher code — runs validation and then marks the voucher as used
+
+
 
 ## How to run Voucherify samples locally?
 
-This and all other examples are implemented in Node. If you want to run examples or create them yourself in a different technology, go to [Voucherify SDK's](https://docs.voucherify.io/docs/sdks) and see what you need to do to do it.
+This sample is built with Node.js and our JS SDK on the server side and HTML + Vanilla JavaScript on the front (with React version coming soon).
 
-1. Clone repository
+Follow the steps below to run locally.
+
+1. Clone repository.
 
 ```
 git clone https://github.com/voucherify-samples/voucher-code-redemption.git
 ```
-2. Create account on [Voucherify Dashboard](https://app.voucherify.io/#/login).
+2. Create your Voucherify account (free tier, no credit card required).
 
-3. Then go to settings and get your Application ID and Secret Key.
+3. Go to the Sandbox project’s settings and get your Application ID and Secret Key, see Authentication.
 
-4. Replace the name of the .env.example file with .env and paste your API keys:
+4. Rename .env.example to .env and paste your API keys:
 ```
-VOUCHERIFY_APP_ID<replace-with-your-application-id>
-VOUCHERIFY_SECRET_KEY<replace-with-your-secret-key>
+VOUCHERIFY_APP_ID=<replace-with-your-application-id>
+VOUCHERIFY_SECRET_KEY=<replace-with-your-secret-key>
 ```
-5. Install dependencies
+5. Install dependencies.
 ```
 npm install
 ```
-6. Start the Node server by entering the command in the terminal
+6. Start the Node server by entering the command in the terminal.
 ```
 npm run start
 ```
-7. Go to [http://localhost:3000](http://localhost:3000/) in your browser
+7. Go to [http://localhost:3000](http://localhost:3000/) in your browser.
 
 
-## Using the Dashboard
-You can create your own promotional configurations using [Dashboard](https://app.voucherify.io/#/login), about which you can also read [here](https://docs.voucherify.io/docs/quickstart). Thanks to this tool, you can create campaigns, generate promotional codes, check statistics using Sandbox Project and many other functionalities that are waiting for you after creating a trial account for 30 days.
+## Get support
 
-## Coupon examples
-``BLCKFRDY`` ``HAPPY-ORDERxq7`` ``HAPPY-ORDERyra`` ``HAPPY-ORDER11T``
+If you found a bug or want to suggest a new sample, please file an issue.
 
-If you want to create more sample coupons, please go to your Dashboard.
+If you have questions, comments, or need help with code, we’re here to help:
+on [Slack](https://www.voucherify.io/community)
+by email
 
-## FAQ
-If you are looking for an answer to your question, visit our [FAQ](https://support.voucherify.io/category/383-faq).
+For more tutorials and full API reference, visit our Developer Hub.
 
-## Get support/information
-If you need support or detailed information about Voucherify, please visit [Support](https://support.voucherify.io/) or [Contact Support](https://www.voucherify.io/contact-support). Do you want to know more and faster about our product? Check out our [Webinars](https://www.voucherify.io/webinars).
-
-
-## Author
-[Voucherify.io](https://www.voucherify.io/)
-
-![Voucherify logo](https://user-images.githubusercontent.com/77458595/165303982-50fa3b0a-35db-49bb-b22f-aa2355683b78.svg)
+## Authors
+[@patricioo1](https://github.com/patricioo1)
