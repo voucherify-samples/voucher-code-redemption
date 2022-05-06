@@ -32,6 +32,7 @@ html {
   font-size: 18px;
   line-height: 21px;
   color: #001246;
+  min-width: 652px;
 }
 
 .shopping-cart {

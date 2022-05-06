@@ -218,7 +218,7 @@ window.addEventListener("load", () => {
                 }
             }
         ).catch(error => {
-            promotionHolder.innerHTML = `<h5 id=error-message">${error.message}</h5>`;
+            promotionHolder.innerHTML = `<h5 id="error-message">${error.message}</h5>`;
         });
     });
 });
