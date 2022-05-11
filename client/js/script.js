@@ -79,6 +79,12 @@ const incrementQuantity = () => {
             items[index].quantity = items[index].quantity + 1;
             quantityInputs[index].value = items[index].quantity;
             summaryPrices();
+            voucherValue.value = "";
+            sessionStorage.removeItem("values");
+            sessionStorage.removeItem("products");
+            grandTotalSpan.innerHTML = `$${(grandTotal + promotions).toFixed(2)}`;
+            allDiscountsSpan.innerHTML = "n/a";
+            promotionHolder.innerHTML = "";
         });
     });
 };
@@ -92,6 +98,12 @@ const decrementQuantity = () => {
             items[index].quantity = items[index].quantity - 1;
             quantityInputs[index].value = items[index].quantity;
             summaryPrices();
+            voucherValue.value = "";
+            sessionStorage.removeItem("values");
+            sessionStorage.removeItem("products");
+            grandTotalSpan.innerHTML = `$${(grandTotal + promotions).toFixed(2)}`;
+            allDiscountsSpan.innerHTML = "n/a";
+            promotionHolder.innerHTML = "";
         });
     });
 };
