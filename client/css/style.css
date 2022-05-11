@@ -237,6 +237,11 @@ input::-webkit-inner-spin-button {
   flex-direction: row;
   justify-content: space-between;
 }
+
+.total-order-holder h4:nth-of-type(3) {
+  margin-bottom: 0px;
+}
+
 .total-order-holder h4 span:nth-child(1) {
   font-weight: 600;
   font-size: 16px;
@@ -247,6 +252,25 @@ input::-webkit-inner-spin-button {
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+}
+
+.voucher-examples {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-style: italic;
+  height: 50px;
+  gap: 0 10px;
+  color: gray;
+}
+
+.voucher-examples span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #bfc5db; */
+  border-radius: 4px;
+  padding: 3px 0px;
 }
 
 .voucher-input-and-button-holder {

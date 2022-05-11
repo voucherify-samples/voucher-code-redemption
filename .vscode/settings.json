@@ -1,8 +1,11 @@
 {
     "liveServer.settings.port": 5501,
     "editor.codeActionsOnSave": {
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a3f3135a62a6695647dbfb2d6a108baecd2f9903
         "source.fixAll.eslint": true
     },
     "eslint.validate": [

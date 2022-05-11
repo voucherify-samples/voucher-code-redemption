@@ -1,4 +1,4 @@
-# Redeem promo code with Voucherify
+ # Redeem promo codes with Voucherify
 
 
 This sample shows you how to integrate with Voucherify [voucher redemption endpoint](https://docs.voucherify.io/reference/redeem-voucher).
