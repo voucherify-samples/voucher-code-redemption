@@ -308,14 +308,14 @@ const innerSummedValues = (discountValueSpan, subtotalValueSpan, allDiscountsVal
 };
 
 
-if (window.location.href === "http://localhost:3000" || window.location.href === "http://localhost:3000/index.html") {
+if (window.location.href === "https://voucherify-code-redemption.herokuapp.com/" || window.location.href === "https://voucherify-code-redemption.herokuapp.com/index.html") {
     window.addEventListener("load", () => {
         sessionStorage.removeItem("values");
         sessionStorage.removeItem("products");
     });
 }
 
-if (window.location.href === "http://localhost:3000/checkout.html") {
+if (window.location.href === "https://voucherify-code-redemption.herokuapp.com/checkout.html") {
     const summedProducts = document.querySelector(".summed-products");
     const couponValueSpan = document.querySelector(".coupon");
     const discountValueSpan = document.querySelector(".discount-value span");
