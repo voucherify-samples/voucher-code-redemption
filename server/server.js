@@ -3,11 +3,16 @@ const { VoucherifyServerSide } = require("@voucherify/sdk");
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
+const asyncHandler = require("express-async-handler");
+const morgan = require("morgan");
+
 const app = express();
+
+app.use(morgan("tiny"));
 
 const client = VoucherifyServerSide({
     applicationId: `${process.env.VOUCHERIFY_APP_ID}`,
-    secretKey    : `${process.env.VOUCHERIFY_SECRET_KEY}`,
+    secretKey: `${process.env.VOUCHERIFY_SECRET_KEY}`,
     // apiUrl: 'https://<region>.api.voucherify.io'
 });
 
@@ -17,17 +22,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../client")));
 
 app.use((req, res, next) => {
-    res.append("Access-Control-Allow-Origin", [ "*" ]);
+    res.append("Access-Control-Allow-Origin", ["*"]);
     res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.append("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"));
-});
-
-app.post("/validate-voucher", (req, res) => {
+app.post("/validate-voucher", asyncHandler(async (req, res) => {
     const voucherCode = req.body.voucherCode;
     if (!voucherCode) {
         return res.send({
@@ -35,62 +36,48 @@ app.post("/validate-voucher", (req, res) => {
         });
     }
 
-    client.validations.validateVoucher(voucherCode)
-        .then(response => {
-            if (response.valid) {
-                res.status(200).send({
-                    status  : "success",
-                    message : "Voucher granted",
-                    amount  : response.discount.amount_off,
-                    campaign: response.campaign ? response.campaign : null,
-                    code    : response.code
-                });
-            } else {
-                res.status(404).send({
-                    status : "error",
-                    message: "Voucher incorrect"
-                });
-            }
-        })
-        .catch(() => {
-            res.status(400).send({
-                status : "error",
-                message: "Voucher not found"
-            });
-        });
-});
+    const { valid, code, discount, campaign } = await client.validations.validateVoucher(voucherCode);
 
-app.post("/redeem-voucher", (req, res) => {
+    if (!valid) {
+        res.status(404).send({
+            status: "error",
+            message: "Voucher incorrect"
+        });
+    }
+
+    return res.status(200).send({
+        status: "success",
+        message: "Voucher granted",
+        amount: discount.amount_off,
+        campaign,
+        code
+    });
+}));
+
+app.post("/redeem-voucher", asyncHandler(async (req, res) => {
     const voucherCode = req.body.voucherCode;
     if (!voucherCode) {
         return res.send({
             message: "Voucher code is required",
         });
     }
-    client.redemptions.redeem(voucherCode)
-        .then(response => {
-            if (response.result) {
-                res.status(200).send({
-                    status  : "success",
-                    message : "Voucher granted",
-                    amount  : response.voucher.discount.amount_off,
-                    campaign: response.voucher.campaign ? response.voucher.campaign : null,
-                    code    : response.voucher.code
-                });
-            } else {
-                res.status(400).send({
-                    status : "error",
-                    message: "Voucher not found"
-                });
-            }
-        })
-        .catch(() => {
-            res.status(404).send({
-                status : "error",
-                message: "Voucher incorrect"
-            });
+    const { result, voucher: { discount, code, campaign } } = await client.redemptions.redeem(voucherCode);
+
+    if (!result) {
+        res.status(400).send({
+            status: "error",
+            message: "Voucher not found"
         });
-});
+    }
+
+    res.status(200).send({
+        status: "success",
+        message: "Voucher granted",
+        amount: discount.amount_off,
+        campaign,
+        code
+    });
+}));
 
 const port = process.env.PORT || 5000;
 
