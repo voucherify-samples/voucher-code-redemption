@@ -61,7 +61,7 @@ app.post("/redeem-voucher", asyncHandler(async (req, res) => {
             message: "Voucher code is required",
         });
     }
-    const { result, voucher: { discount, code, campaign } } = await client.redemptions.redeem(voucherCode);
+    const { result, voucher } = await client.redemptions.redeem(voucherCode);
 
     if (!result) {
         res.status(400).send({
@@ -73,9 +73,9 @@ app.post("/redeem-voucher", asyncHandler(async (req, res) => {
     res.status(200).send({
         status: "success",
         message: "Voucher granted",
-        amount: discount.amount_off,
-        campaign,
-        code
+        amount: voucher.discount.amount_off,
+        campaign: voucher.campaign,
+        code: voucher.campaign
     });
 }));
 
