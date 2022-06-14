@@ -39,13 +39,13 @@ app.post("/validate-voucher", asyncHandler(async (req, res) => {
     const { valid, code, discount, campaign } = await client.validations.validateVoucher(voucherCode);
 
     if (!valid) {
-        res.status(404).send({
+        return res.status(404).send({
             status: "error",
             message: "Voucher incorrect"
         });
     }
 
-    return res.status(200).send({
+    res.status(200).send({
         status: "success",
         message: "Voucher granted",
         amount: discount.amount_off,
@@ -64,7 +64,7 @@ app.post("/redeem-voucher", asyncHandler(async (req, res) => {
     const { result, voucher } = await client.redemptions.redeem(voucherCode);
 
     if (!result) {
-        res.status(400).send({
+        return res.status(400).send({
             status: "error",
             message: "Voucher not found"
         });
@@ -75,7 +75,7 @@ app.post("/redeem-voucher", asyncHandler(async (req, res) => {
         message: "Voucher granted",
         amount: voucher.discount.amount_off,
         campaign: voucher.campaign,
-        code: voucher.campaign
+        code: voucher.code
     });
 }));
 
