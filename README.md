@@ -18,6 +18,7 @@ The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/tes
 ``FREE SHIPPING`` - You find it in your dashboard but if there is not Free Shipping Voucher you have to create code with free shipping on [Sandbox](https://docs.voucherify.io/docs/free-shipping-discount)
 
 ``BLCKFRDY`` and many other vouchers you find in your [Sandbox](https://docs.voucherify.io/docs/free-shipping-discount) -> Vouchers.
+Some codes have a validation rules so do not use them or you will not be charged a discount.
 
 The promo code box accepts Amount and Percentage [discount types](https://docs.voucherify.io/docs/vouchers-1#discount-coupons), more coming soon. 
 
