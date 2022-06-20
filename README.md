@@ -16,6 +16,7 @@ This is where [Voucherify promotion engine](https://docs.voucherify.io/docs) kic
 The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/testing). Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
 
 ``FREE SHIPPING`` - You find it in your dashboard but if there is not Free Shipping Voucher you have to create code with free shipping on [Sandbox](https://docs.voucherify.io/docs/free-shipping-discount)
+
 ``BLCKFRDY`` and many others vouchers you find in your [Sandbox](https://docs.voucherify.io/docs/free-shipping-discount) -> Vouchers.
 
 The promo code box accepts Amount and Percentage [discount types](https://docs.voucherify.io/docs/vouchers-1#discount-coupons), more coming soon. 
