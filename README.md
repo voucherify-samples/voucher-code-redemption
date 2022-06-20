@@ -11,7 +11,7 @@ This is where [Voucherify promotion engine](https://docs.voucherify.io/docs) kic
 
 [Live demo](https://voucherify-code-redemption.herokuapp.com/)
 
-![](https://github.com/voucherify-samples/voucher-code-redemption/blob/main/voucherify-demo.gif)
+![](https://github.com/voucherify-samples/voucher-code-redemption/blob/main/free_shipping.gif)
 
 The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/testing). Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
 
