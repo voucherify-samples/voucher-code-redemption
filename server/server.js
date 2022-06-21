@@ -7,7 +7,6 @@ const asyncHandler = require("express-async-handler");
 const morgan = require("morgan");
 
 const app = express();
-const asyncHandler = require("express-async-handler");
 
 app.use(morgan("tiny"));
 
@@ -37,17 +36,17 @@ app.post("/validate-voucher", asyncHandler(async (req, res) => {
         });
     }
     const { valid, code, discount, campaign } = await client.validations.validateVoucher(voucherCode);
-  
+
     if (!valid) {
         res.status(400).send({
-            status : "error",
+            status: "error",
             message: "Voucher is not correct"
         });
     }
     return res.status(200).send({
-        status : "success",
+        status: "success",
         message: "Voucher granted",
-        amount : discount.amount_off,
+        amount: discount.amount_off,
         campaign,
         code
     });
@@ -63,14 +62,14 @@ app.post("/redeem-voucher", asyncHandler(async (req, res) => {
     const { result, voucher: { discount, campaign, code } } = await client.redemptions.redeem(voucherCode);
     if (!result) {
         return res.status(400).send({
-            status : "error",
+            status: "error",
             message: "Voucher is not correct"
         });
     }
     return res.status(200).send({
-        status : "success",
+        status: "success",
         message: "Voucher granted",
-        amount : discount.amount_off,
+        amount: discount.amount_off,
         campaign,
         code
     });
