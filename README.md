@@ -71,3 +71,34 @@ For more tutorials and full API reference, visit our [Developer Hub](https://doc
 
 ## Authors
 [@patricioo1](https://github.com/patricioo1)
+
+
+```mermaid
+sequenceDiagram
+    participant S as Store
+    participant I as Integration
+    participant V as Voucherify
+    
+    I->>S: Watch cart or coupon changes
+    activate S
+    S-->>I: Cart or coupon updated 
+    deactivate S
+    I->>V: Validate cart
+    activate V
+    V-->>I: Validated coupons and calculated discounts
+    deactivate V
+    I->>S: Apply discounts on cart
+
+    Note over S,V: Eventually, customer will put the order
+
+    I->>S: Watch order paid event
+    activate S
+    S->>I: Order paid
+    deactivate S
+    I->>V: Redeem coupon (coupon codes + order)
+
+
+    
+    
+
+```
