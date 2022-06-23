@@ -40,7 +40,29 @@
         class="cartSummary"
         data-component="cartSummary"
       >
+        <h2>Item summary (4)</h2>
+        <div id="cart-summary-list">
+
+        </div>
       </section>
+      <template id="cart-summary-row-template">
+        <div class='item'>
+          <img src='./images/johan2.jpeg' alt="product image"/>
+          <div class='name-and-description'>
+            <span>${item.productName}</span>
+            <span>${item.productDescription}</span>
+          </div>
+          <div class="form-and-button-holder">
+            <button class='decrement' >-</button>
+            <form>
+            <input class='increment-input' type="number"/>
+            </form>
+            <button class='increment' >+</button>
+          </div>
+          <span class="price"></span>
+          <button class="remove-button">Remove</button>
+         </div>
+      </template>
       <section class="orderSummary" data-component="orderSummary">
         <h2>Order summary</h2>
         <div class="total-order-holder">

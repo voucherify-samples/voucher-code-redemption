@@ -1,7 +1,8 @@
 // Cart componmets
 export class CartPreview {
     constructor() {
-        this.htmlElement = document.getElementById("cart-summary");
+        this.htmlElement = document.getElementById("cart-summary-list");
+        this.listRowHtmlElement = document.getElementById("cart-summary-row-template");
     }
 
     onIncrement(incrementHandler) {
@@ -13,42 +14,30 @@ export class CartPreview {
     }
 
     render(cartItems) {
-        this.htmlElement.innerHTML = `<h2>Item summary (4)</h2> ${cartItems
+        this.htmlElement.replaceChildren(...cartItems
             .map(
-                (item, index) =>
-                    `<div class='item' key=${index}>
-                          <img src='${item.src}' alt="product ${item.productName}"/>
-                          <div class='name-and-description'>
-                            <span>${item.productName}</span>
-                            <span>${item.productDescription}</span>
-                          </div>
-                          <div class="form-and-button-holder">
-                            <button class='decrement' id="decrementQuantity-${index}">-</button>
-                            <form>
-                            <input class='increment-input' type="number" value="${item.quantity}"/>
-                            </form>
-                            <button class='increment' id="incrementQuantity-${index}">+</button>
-                          </div>
-                          <span class="price">$${item.price}</span>
-                          <button class="remove-button">Remove</button>
-                         </div>`
-            )
-            .join("")}`;
-        this.htmlElement.querySelectorAll(".increment").forEach((button, index) => {
-            button.addEventListener("click", () => {
-                if (typeof this.incrementHandler === "function") {
-                    this.incrementHandler(index);
-                }
-            });
-        });
-        this.htmlElement.querySelectorAll(".decrement").forEach((button, index) => {
-            button.addEventListener("click", () => {
-                if (typeof this.decrementHandler === "function") {
-                    this.decrementHandler(index);
-                }
-            });
-        });
+                (item, index) => {
+                    const row = this.listRowHtmlElement.cloneNode(true).content.children[0];
+                    row.setAttribute("key", index);
+                    row.querySelector("img").setAttribute("src", item.src);
+                    row.querySelector("input").setAttribute("value", item.quantity);
+                    row.querySelector(".name-and-description span:nth-child(1)").innerHTML = item.productName;
+                    row.querySelector(".name-and-description span:nth-child(2)").innerHTML = item.productDescription;
 
+                    row.querySelector(".increment").addEventListener("click", () => {
+                        if (typeof this.incrementHandler === "function") {
+                            this.incrementHandler(index);
+                        }
+                    });
+
+                    row.querySelector(".decrement").addEventListener("click", () => {
+                        if (typeof this.incrementHandler === "function") {
+                            this.decrementHandler(index);
+                        }
+                    });
+                    return row;
+                }
+            ));
     }
 }
 
