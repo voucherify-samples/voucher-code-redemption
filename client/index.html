@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
-    <!-- Navbar -->
     <section data-component="navbar" class="navbar">
       <img class="shop-logo" alt="shop logo" src="./images/black.svg" />
       <ul class="navbar-list-holder">
@@ -30,9 +29,6 @@
         <span class="shopping-cart"><img src="./images/shopping_cart.svg" alt="Shopping cart"></span>
       </ul>
     </section>
-
-    <!-- Cart summary -->
-
     <h2>Your cart</h2>
     <div class="cart-and-summary-holder">
       <section
@@ -49,19 +45,17 @@
           <h4>Coupon Codes:</h4>
           <div class="voucher-examples">
             <span>BLCKFRDY (10% off)</span>
-            <span>HAPPY-ORDERxq7 (20% off)</span>
-            <span>HAPPY-ORDERyra (20% off)</span>
             <span>FREE SHIPPING (Free shipping)</span>
           </div>
           <div class="voucher-input-and-button-holder">
-            <form>
+            <form id="validate-form">
               <input
                 id="voucher-code"
                 type="text"
                 placeholder="Enter your code"
               />
+              <button type="submit" id="check-voucher-code"><img src="./images/rightArrow.svg" alt="Right Arrow"></button>
             </form>
-            <button id="check-voucher-code"><img src="./images/rightArrow.svg" alt="Right Arrow"></button>
           </div>
           <div class="promotions-holder">
             <h4>Promotions:</h4>

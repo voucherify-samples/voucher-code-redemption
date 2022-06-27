@@ -1,114 +1,74 @@
-import * as s from "./services.js";
+import * as components from "./components.js";
 
-s.summaryCardItems && s.renderSummaryCardItems(s.summaryCardItems);
+const { products: productsFromStorage, voucherProperties: voucherPropertiesFromStorage } = components.getCartAndVoucherFromSessionStorage();
 
-const quantityInputs = document.querySelectorAll(".increment-input");
-const incrementButtons = document.querySelectorAll(".increment");
-const decrementButtons = document.querySelectorAll(".decrement");
-
-s.handleIncrement(incrementButtons, quantityInputs);
-s.handleDecrement(decrementButtons, quantityInputs);
-
-const fetchValidateVoucher = async voucherCode => {
-    const response = await fetch("/validate-voucher", {
-        method : "POST",
-        headers: {
-            "Accept"      : "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ voucherCode }),
-    });
-    const data = await response.json();
-
-    if (response.status !== 200) {
-        throw Error(data.message);
-    }
-    return { amount: data.amount, campaign: data.campaign, code: data.code, status: data.status };
+export const products = productsFromStorage.length ? productsFromStorage : components.items;
+export const voucherProperties = voucherPropertiesFromStorage.code ? voucherPropertiesFromStorage : {
+    amount  : "",
+    code    : "",
+    campaign: ""
 };
 
-const fetchRedeemVoucher = async voucherCode => {
-    const response = await fetch("/redeem-voucher", {
-        method : "POST",
-        headers: {
-            "Accept"      : "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ voucherCode }),
-    });
-
-    const data = await response.json();
-    if (response.status !== 200) {
-        throw Error(data.message);
-    }
-    return { amount: data.amount, campaign: data.campaign, code: data.code, status: data.status };
+const handleIncrementClick = index => {
+    products[index].quantity++;
+    components.updateOrderSummary(products);
+    components.updateSummaryCardItems(products);
+    components.handleIncrement(handleIncrementClick);
 };
 
-s.checkoutButton && s.checkoutButton.addEventListener("click", e => {
-    if (!s.voucherProperties.voucher || !s.promotionHolder.childNodes.length) {
-        e.preventDefault();
-        s.promotionHolder.innerHTML = "<h5 id=\"error-message\">Please validate voucher code</h5>";
-    } else {
-        setTimeout(() => {
-            productsToSessionStorage();
-            window.location.href = "/checkout.html";
-        }, 1000);
-    }
-});
+components.updateSummaryCardItems(products);
+components.handleIncrement(handleIncrementClick);
 
-const productsToSessionStorage = () => {
-    window.sessionStorage.setItem("products", JSON.stringify(s.items));
-    window.sessionStorage.setItem("values", JSON.stringify(s.voucherProperties));
-};
 
-const validateVoucher = () => {
-    const voucherCode = s.voucherValue.value.trim();
+components.handleDecrement(products);
+components.updateOrderSummary(products, voucherProperties);
 
-    if (s.items.reduce((a, b) => a + b.quantity, 0) === 0) {
-        s.promotionHolder.innerHTML = "<h5 id=\"error-message\">No items in basket</h5>";
-        return false;
+const fetchValidateVoucher = async code => {
+    if (!code) {
+        throw new Error("Please enter voucher code");
     }
-    if (!voucherCode) {
-        s.promotionHolder.innerHTML = "<h5 id=\"error-message\">Please enter voucher code</h5>";
-        return false;
+    if (components.items.reduce((a, b) => a + b.quantity, 0) <= 0) {
+        throw new Error("No items in basket");
     }
-    fetchValidateVoucher(voucherCode).then(
-        result => {
-            if (result.status === "success") {
-                s.updateOrderSummary(result);
-            }
+    try {
+        const response = await fetch("/validate-voucher", {
+            method : "POST",
+            headers: {
+                "Accept"      : "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ code }),
+        });
+        const data = await response.json();
+        if (response.status !== 200) {
+            throw new Error(data.message);
         }
-    ).catch(error => {
-        s.promotionHolder.innerHTML = `<h5 id="error-message">${error.message}</h5>`;
-    });
+        if (data.status !== "success") {
+            throw new Error("We could not validate coupon");
+        }
+        voucherProperties.amount = data.amount;
+        voucherProperties.code = data.code;
+
+        components.updateOrderSummary(products, data);
+        return data;
+    } catch (error) {
+        components.displayErrorMessage(error);
+    }
 };
 
-s.voucherValue && s.voucherValue.addEventListener("input", () => {
-    if (!s.voucherValue.value) {
-        s.updateOrderSummary();
+components.checkoutButton.addEventListener("click", e => {
+    if (!components.promotionHolder.childNodes.length || !voucherProperties.code) {
+        e.preventDefault();
+        components.promotionHolder.innerHTML = "<h5 id=\"error-message\">Please validate voucher code</h5>";
+        return;
     }
+    components.saveCartAndVoucherInSessioStorage(products, voucherProperties);
+    window.location.href = "/checkout.html";
+
 });
 
-s.validateVoucherButton && (s.validateVoucherButton.addEventListener("click", validateVoucher) || s.voucherValue.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-        s.voucherForm.addEventListener("submit", e => {
-            e.preventDefault();
-        });
-        validateVoucher();
-    }
-}));
-
-s.redeemVoucherButton && s.redeemVoucherButton.addEventListener("click", e => {
-    e.preventDefault();
-    const values = JSON.parse(sessionStorage.getItem("values") || "[]");
-    const voucherCode = values.voucher;
-    fetchRedeemVoucher(voucherCode)
-        .then(result => {
-            if (result.status === "success") {
-                s.redeemVoucherButton.innerHTML = "Order completed";
-                sessionStorage.clear();
-            }
-        })
-        .catch(error => {
-            s.redeemVoucherButton.innerHTML = `${error.message}`;
-        });
+components.validateForm.addEventListener("submit", event => {
+    event.preventDefault();
+    const code = components.voucherCodeValue.value;
+    fetchValidateVoucher(code);
 });
