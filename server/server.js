@@ -3,12 +3,17 @@ const { VoucherifyServerSide } = require("@voucherify/sdk");
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
+const asyncHandler = require("express-async-handler");
+const morgan = require("morgan");
+
 const app = express();
 const asyncHandler = require("express-async-handler");
 
+app.use(morgan("tiny"));
+
 const client = VoucherifyServerSide({
     applicationId: `${process.env.VOUCHERIFY_APP_ID}`,
-    secretKey    : `${process.env.VOUCHERIFY_SECRET_KEY}`,
+    secretKey: `${process.env.VOUCHERIFY_SECRET_KEY}`,
     // apiUrl: 'https://<region>.api.voucherify.io'
 });
 
@@ -18,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../client")));
 
 app.use((req, res, next) => {
-    res.append("Access-Control-Allow-Origin", [ "*" ]);
+    res.append("Access-Control-Allow-Origin", ["*"]);
     res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.append("Access-Control-Allow-Headers", "Content-Type");
     next();
@@ -32,7 +37,7 @@ app.post("/validate-voucher", asyncHandler(async (req, res) => {
         });
     }
     const { valid, code, discount, campaign } = await client.validations.validateVoucher(voucherCode);
-
+  
     if (!valid) {
         return res.status(400).send({
             status : "error",
