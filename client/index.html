@@ -36,19 +36,42 @@
         class="cartSummary"
         data-component="cartSummary"
       >
+      <h2>Item summary</h2>
+      <div id="cart-summary-list">
+
+      </div>
       </section>
+      <template id="cart-summary-row-template">
+        <div class='item'>
+          <img src='./images/johan2.jpeg' alt="product image"/>
+          <div class='name-and-description'>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="form-and-button-holder">
+            <button class='decrement' >-</button>
+            <form>
+            <input class='increment-input' type="number"/>
+            </form>
+            <button class='increment' >+</button>
+          </div>
+          <span class="price"></span>
+          <button class="remove-button">Remove</button>
+         </div>
+      </template>
       <section class="orderSummary" data-component="orderSummary">
         <h2>Order summary</h2>
-        <div class="total-order-holder">
+        <div id="total-order-holder"></div>
+        <template id="total-order-holder-template">
           <h4>Subtotal<span id="subtotal">$135.85</span></h4>
           <h4>Shipping<span>Calculated at next step</span></h4>
           <h4>Coupon Codes:</h4>
           <div class="voucher-examples">
             <span>BLCKFRDY (10% off)</span>
-            <span>FREE SHIPPING (Free shipping)</span>
+            <span>FREE-SHIPPING (Free shipping)</span>
           </div>
           <div class="voucher-input-and-button-holder">
-            <form id="validate-form">
+            <form id="voucher-code-form">
               <input
                 id="voucher-code"
                 type="text"
@@ -65,7 +88,7 @@
             All Your Discounts:<span id="all-discounts">n/a</span>
           </h4>
           <h4>Grand total:<span id="grand-total">$135.85</span></h4>
-        </div>
+        </template>
         <button id="checkout-button" class="checkout-button">Checkout</button>
       </section>
     </div>

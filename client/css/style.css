@@ -77,6 +77,10 @@ html {
   line-height: 32px;
 }
 
+#cart-summary-list {
+  width: 100%
+}
+
 .item {
   display: flex;
   flex-direction: row;
@@ -217,7 +221,7 @@ input::-webkit-inner-spin-button {
   line-height: 32px;
 }
 
-.total-order-holder {
+#total-order-holder {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -228,7 +232,7 @@ input::-webkit-inner-spin-button {
   border: 1px solid #b1b8d0;
 }
 
-.total-order-holder h4 {
+#total-order-holder h4 {
   font-weight: 600;
   font-size: 16px;
   width: 100%;
@@ -238,17 +242,17 @@ input::-webkit-inner-spin-button {
   justify-content: space-between;
 }
 
-.total-order-holder h4:nth-of-type(3) {
+#total-order-holder h4:nth-of-type(3) {
   margin-bottom: 0px;
 }
 
-.total-order-holder h4 span:nth-child(1) {
+#total-order-holder h4 span:nth-child(1) {
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;
 }
 
-.total-order-holder h4:nth-child(2) span {
+#total-order-holder h4:nth-child(2) span {
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;

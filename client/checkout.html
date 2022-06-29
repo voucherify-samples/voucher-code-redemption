@@ -87,9 +87,19 @@
 
             </section>
             <section class="checkout-view">
-                <div class="summed-products">
-                </div>
-                <div class="discounts">
+                <div class="summed-products"></div>
+                <template class="summed-products-template">
+                    <div class="each-product">
+                        <img src="" />
+                        <div class="each-product-name">
+                            <h6></h6>
+                            <p></p>
+                        </div>
+                        <span></span>
+                    </div>
+                </template>
+                <div class="discounts"></div>
+                <template class="discounts-template">
                     <div class="value-discounts">
                         <p>Discount applied to cart</p>
                         <p><span><img src="./images/rightArrow.svg" alt="My coupons"></span> My coupons</p>
@@ -119,7 +129,7 @@
                             <span>0</span>
                         </div>
                     </div>
-                </div>
+                </template>
             </section>
         </div>
         <script

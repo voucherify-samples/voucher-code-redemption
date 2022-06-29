@@ -1,19 +1,19 @@
 import * as components from "./components.js";
 
 const { products, voucherProperties } = components.getCartAndVoucherFromSessionStorage();
+components.renderProductsFromStorage(products);
+components.renderVoucherPropertiesFromStorage(voucherProperties, products);
 
-components.updateProductsFromStorage(products);
-components.updateVoucherPropertiesFromStorage(voucherProperties, products);
-
-const fetchRedeemVoucher = async code => {
+const fetchRedeemVoucher = async (code, products) => {
     try {
+        const { amount } = components.filterAndReduceItemsWithAmount(products);
         const response = await fetch("/redeem-voucher", {
             method : "POST",
             headers: {
                 "Accept"      : "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code }),
+            body: JSON.stringify({ code, amount }),
         });
 
         const data = await response.json();
@@ -34,5 +34,5 @@ const fetchRedeemVoucher = async code => {
 components.redeemVoucherButton.addEventListener("click", e => {
     e.preventDefault();
     const voucherCode = voucherProperties.code;
-    fetchRedeemVoucher(voucherCode);
+    fetchRedeemVoucher(voucherCode, products);
 });

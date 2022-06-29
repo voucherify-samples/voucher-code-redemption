@@ -4,16 +4,11 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const asyncHandler = require("express-async-handler");
-const morgan = require("morgan");
-
 const app = express();
-const asyncHandler = require("express-async-handler");
-
-app.use(morgan("tiny"));
 
 const client = VoucherifyServerSide({
     applicationId: `${process.env.VOUCHERIFY_APP_ID}`,
-    secretKey: `${process.env.VOUCHERIFY_SECRET_KEY}`,
+    secretKey    : `${process.env.VOUCHERIFY_SECRET_KEY}`,
     // apiUrl: 'https://<region>.api.voucherify.io'
 });
 
@@ -23,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../client")));
 
 app.use((req, res, next) => {
-    res.append("Access-Control-Allow-Origin", ["*"]);
+    res.append("Access-Control-Allow-Origin", [ "*" ]);
     res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.append("Access-Control-Allow-Headers", "Content-Type");
     next();
@@ -31,13 +26,21 @@ app.use((req, res, next) => {
 
 app.post("/validate-voucher", asyncHandler(async (req, res) => {
     const voucherCode = req.body.code;
+    const products = req.body.items;
+    const amount = req.body.amount;
     if (!voucherCode) {
         return res.send({
             message: "Voucher code is required"
         });
     }
-    const { valid, code, discount, campaign } = await client.validations.validateVoucher(voucherCode);
-  
+
+    if (!products.length) {
+        return res.send({
+            message: "Products are required"
+        });
+    }
+    const { valid, code, discount, campaign } = await client.validations.validateVoucher(voucherCode, { order: { products }, amount });
+
     if (!valid) {
         return res.status(400).send({
             status : "error",
@@ -55,16 +58,17 @@ app.post("/validate-voucher", asyncHandler(async (req, res) => {
 
 app.post("/redeem-voucher", asyncHandler(async (req, res) => {
     const voucherCode = req.body.code;
+    const amount = req.body.amount;
     if (!voucherCode) {
         return res.send({
             message: "Voucher code is required"
         });
     }
-    const { result, voucher: { discount, campaign, code } } = await client.redemptions.redeem(voucherCode);
+    const { result, voucher: { discount, campaign, code } } = await client.redemptions.redeem(voucherCode, { order: amount });
     if (!result) {
         return res.status(400).send({
             status : "error",
-            message: "Voucher is not correct"
+            message: "Voucher redeem is not possible"
         });
     }
     return res.status(200).send({
