@@ -1,16 +1,23 @@
-import * as components from "./components.js";
+import {
+    renderProductsFromStorage,
+    getCartAndVoucherFromSessionStorage,
+    renderVoucherPropertiesFromStorage,
+    filterAndReduceItemsWithAmount,
+    redeemVoucherButton
+} from "./lib.js";
 
-const { products, voucherProperties } = components.getCartAndVoucherFromSessionStorage();
-components.renderProductsFromStorage(products);
-components.renderVoucherPropertiesFromStorage(voucherProperties, products);
+const { products, voucherProperties } = getCartAndVoucherFromSessionStorage();
+
+renderProductsFromStorage(products);
+renderVoucherPropertiesFromStorage(voucherProperties, products);
 
 const fetchRedeemVoucher = async (code, products) => {
     try {
-        const { amount } = components.filterAndReduceItemsWithAmount(products);
+        const { amount } = filterAndReduceItemsWithAmount(products);
         const response = await fetch("/redeem-voucher", {
-            method : "POST",
+            method: "POST",
             headers: {
-                "Accept"      : "application/json",
+                "Accept": "application/json",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ code, amount }),
@@ -23,16 +30,16 @@ const fetchRedeemVoucher = async (code, products) => {
         if (data.status !== "success") {
             throw new Error("Redeem voucher is not possible");
         }
-        components.redeemVoucherButton.innerHTML = `${data.message}`;
-        window.sessionStorage.clear();
+        redeemVoucherButton.innerHTML = `${data.message}`;
         return data;
     } catch (error) {
-        components.redeemVoucherButton.innerHTML = `${error.message}`;
+        redeemVoucherButton.innerHTML = `${error.message}`;
     }
 };
 
-components.redeemVoucherButton.addEventListener("click", e => {
+redeemVoucherButton.addEventListener("click", e => {
     e.preventDefault();
     const voucherCode = voucherProperties.code;
     fetchRedeemVoucher(voucherCode, products);
+    window.sessionStorage.clear();
 });

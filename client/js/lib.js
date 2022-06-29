@@ -120,10 +120,10 @@ export const getCartAndVoucherFromSessionStorage = () => {
     const voucherPropertiesFromSessionStorage = JSON.parse(sessionStorage.getItem("voucherProperties") || "{}");
 
     return {
-        products         : productsFromSessionStorage.length ? productsFromSessionStorage : items,
+        products: productsFromSessionStorage.length ? productsFromSessionStorage : defaultItems,
         voucherProperties: voucherPropertiesFromSessionStorage.code ? voucherPropertiesFromSessionStorage : {
             amount: "",
-            code  : ""
+            code: ""
         }
     };
 };
@@ -133,33 +133,33 @@ export const saveCartAndVoucherInSessioStorage = (items, voucherProperties) => {
     window.sessionStorage.setItem("voucherProperties", JSON.stringify(voucherProperties));
 };
 
-export const items = [
+export const defaultItems = [
     {
-        productName       : "Johan & Nystrom Caravan",
+        productName: "Johan & Nystrom Caravan",
         productDescription: "20 oz bag",
-        quantity          : 1,
-        price             : "26.99",
-        src               : "./images/johan2.jpeg",
+        quantity: 1,
+        price: "26.99",
+        src: "./images/johan2.jpeg",
     },
     {
-        productName       : "Illy Arabica",
+        productName: "Illy Arabica",
         productDescription: "Bestseller 18 oz bag",
-        quantity          : 1,
-        price             : "21.02",
-        src               : "./images/illy_arabica.jpeg",
+        quantity: 1,
+        price: "21.02",
+        src: "./images/illy_arabica.jpeg",
     },
     {
-        productName       : "Hard Beans Etiopia",
+        productName: "Hard Beans Etiopia",
         productDescription: "6 oz bag",
-        quantity          : 1,
-        price             : "3.88",
-        src               : "./images/hardbean.jpeg",
+        quantity: 1,
+        price: "3.88",
+        src: "./images/hardbean.jpeg",
     },
     {
-        productName       : "Johan & Nystrom Bourbon",
+        productName: "Johan & Nystrom Bourbon",
         productDescription: "20 oz bag",
-        quantity          : 2,
-        price             : "41.98",
-        src               : "./images/johan2.jpeg",
+        quantity: 2,
+        price: "41.98",
+        src: "./images/johan2.jpeg",
     },
 ];

@@ -1,60 +1,70 @@
-import * as components from "./components.js";
+import {
+    getCartAndVoucherFromSessionStorage,
+    displayErrorMessage,
+    getCartPreviewRender,
+    getOrderSummaryRender,
+    filterAndReduceItemsWithAmount,
+    checkoutButton,
+    saveCartAndVoucherInSessioStorage
+} from "./lib.js";
 
-const { products, voucherProperties } = components.getCartAndVoucherFromSessionStorage();
+const { products, voucherProperties } = getCartAndVoucherFromSessionStorage();
 
-const renderCartPreview = components.getCartPreviewRender({
-    onIncrement: async (index, render) => {
-        products[index].quantity++;
-        if (voucherProperties.code) {
-            try {
-                await validateAndUpdateVoucherProperties(voucherProperties.code, products);
-            } catch (error) {
-                components.displayErrorMessage(error.message);
-            }
-        }
-        render(products);
-        renderOrderSummary(products, voucherProperties);
-    },
-    onDecrement: async (index, render) => {
-        if (products[index].quantity <= 0) { return; }
-        products[index].quantity--;
-        if (voucherProperties.code) {
-            try {
-                await validateAndUpdateVoucherProperties(voucherProperties.code, products);
-            } catch (error) {
-                components.displayErrorMessage(error.message);
-            }
-        }
-        render(products);
-        renderOrderSummary(products, voucherProperties);
-    },
-});
-renderCartPreview(products);
 
-const renderOrderSummary = components.getOrderSummaryRender({
-    onVoucherCodeSubmit: async (voucherValue, render) => {
+const onIncrement = async (index, render) => {
+    products[index].quantity++;
+    if (voucherProperties.code) {
         try {
-            await validateAndUpdateVoucherProperties(voucherValue, products);
-            render(products, voucherProperties);
+            await validateAndUpdateVoucherProperties(voucherProperties.code, products);
         } catch (error) {
-            components.displayErrorMessage(error.message);
+            displayErrorMessage(error.message);
         }
     }
-});
+    render(products);
+    renderOrderSummary(products, voucherProperties);
+};
+
+const onDecrement = async (index, render) => {
+    if (products[index].quantity <= 0) { return; }
+    products[index].quantity--;
+    if (voucherProperties.code) {
+        try {
+            await validateAndUpdateVoucherProperties(voucherProperties.code, products);
+        } catch (error) {
+            displayErrorMessage(error.message);
+        }
+    }
+    render(products);
+    renderOrderSummary(products, voucherProperties);
+};
+
+const onVoucherCodeSubmit = async (voucherValue, render) => {
+    try {
+        await validateAndUpdateVoucherProperties(voucherValue, products);
+        render(products, voucherProperties);
+    } catch (error) {
+        displayErrorMessage(error.message);
+    }
+};
+
+const renderCartPreview = getCartPreviewRender({ onIncrement, onDecrement });
+renderCartPreview(products);
+
+const renderOrderSummary = getOrderSummaryRender({ onVoucherCodeSubmit });
 renderOrderSummary(products, voucherProperties);
 
 const validateAndUpdateVoucherProperties = async (code, products) => {
     if (!code) {
         throw new Error("Please enter voucher code");
     }
-    if (components.items.reduce((a, b) => a + b.quantity, 0) <= 0) {
+    if (products.reduce((a, b) => a + b.quantity, 0) <= 0) {
         throw new Error("No items in basket");
     }
-    const { items, amount } = components.filterAndReduceItemsWithAmount(products);
+    const { items, amount } = filterAndReduceItemsWithAmount(products);
     const response = await fetch("/validate-voucher", {
-        method : "POST",
+        method: "POST",
         headers: {
-            "Accept"      : "application/json",
+            "Accept": "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ code, items, amount }),
@@ -71,13 +81,12 @@ const validateAndUpdateVoucherProperties = async (code, products) => {
     return data;
 };
 
-components.checkoutButton.addEventListener("click", e => {
-    const promotionHolder = document.getElementById("promotion-holder");
-    if (!promotionHolder.childNodes.length || !voucherProperties.code || products.reduce((a, b) => a + b.quantity, 0) <= 0) {
+checkoutButton.addEventListener("click", e => {
+    if (!voucherProperties.code) {
         e.preventDefault();
-        promotionHolder.innerHTML = "<h5 id=\"error-message\">Please validate voucher code or add items to basket</h5>";
+        displayErrorMessage(error.message);
         return false;
     }
-    components.saveCartAndVoucherInSessioStorage(products, voucherProperties);
+    saveCartAndVoucherInSessioStorage(products, voucherProperties);
     window.location.href = "/checkout.html";
 });
