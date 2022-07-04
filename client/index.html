@@ -56,7 +56,6 @@
             <button class='increment' >+</button>
           </div>
           <span class="price"></span>
-          <button class="remove-button">Remove</button>
          </div>
       </template>
       <section class="orderSummary" data-component="orderSummary">
@@ -67,7 +66,7 @@
           <h4>Shipping<span>Calculated at next step</span></h4>
           <h4>Coupon Codes:</h4>
           <div class="voucher-examples">
-            <span>BLCKFRDY (10% off)</span>
+            <span>BLCKFRDY ($10.00)</span>
             <span>FREE-SHIPPING (Free shipping)</span>
           </div>
           <div class="voucher-input-and-button-holder">
@@ -80,9 +79,13 @@
               <button type="submit" id="check-voucher-code"><img src="./images/rightArrow.svg" alt="Right Arrow"></button>
             </form>
           </div>
+          <div class="voucher-form-error">
+            <p></p>
+          </div>
           <div class="promotions-holder">
             <h4>Promotions:</h4>
             <div id="promotion-holder" class="promotion-holder"></div>
+            <div class="error-holder"></div>
           </div>
           <h4 class="discount-price-holder">
             All Your Discounts:<span id="all-discounts">n/a</span>

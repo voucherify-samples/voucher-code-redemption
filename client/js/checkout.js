@@ -1,19 +1,32 @@
-import * as components from "./components.js";
+import {
+    redeemVoucherButton,
+    renderVoucherPropertiesFromStorage,
+    renderProductsFromStorage,
+    getCartAndVoucherFromSessionStorage,
+    filterAndReduceProducts
+} from "./lib.js";
 
-const { products, voucherProperties } = components.getCartAndVoucherFromSessionStorage();
-components.renderProductsFromStorage(products);
-components.renderVoucherPropertiesFromStorage(voucherProperties, products);
+let products;
+let voucherProperties;
 
-const fetchRedeemVoucher = async (code, products) => {
+getCartAndVoucherFromSessionStorage().then(data => {
+    products = data.products;
+    voucherProperties = data.voucherProperties;
+    console.log(products)
+    renderProductsFromStorage(products);
+    renderVoucherPropertiesFromStorage(voucherProperties, products);
+});
+
+const fetchRedeemVoucher = async (code, products, name) => {
     try {
-        const { amount } = components.filterAndReduceItemsWithAmount(products);
+        const { items } = filterAndReduceProducts(products);
         const response = await fetch("/redeem-voucher", {
             method : "POST",
             headers: {
                 "Accept"      : "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code, amount }),
+            body: JSON.stringify({ code, items, name }),
         });
 
         const data = await response.json();
@@ -23,16 +36,17 @@ const fetchRedeemVoucher = async (code, products) => {
         if (data.status !== "success") {
             throw new Error("Redeem voucher is not possible");
         }
-        components.redeemVoucherButton.innerHTML = `${data.message}`;
-        window.sessionStorage.clear();
+        redeemVoucherButton.innerHTML = `${data.message}`;
         return data;
     } catch (error) {
-        components.redeemVoucherButton.innerHTML = `${error.message}`;
+        redeemVoucherButton.innerHTML = `${error.message}`;
     }
 };
 
-components.redeemVoucherButton.addEventListener("click", e => {
+redeemVoucherButton.addEventListener("click", e => {
     e.preventDefault();
     const voucherCode = voucherProperties.code;
-    fetchRedeemVoucher(voucherCode, products);
+    const fullName = document.getElementById("fullname").value;
+    fetchRedeemVoucher(voucherCode, products, fullName);
+    window.sessionStorage.clear();
 });

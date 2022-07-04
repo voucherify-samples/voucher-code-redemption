@@ -9,7 +9,7 @@ export const getCartPreviewRender = ({ onIncrement, onDecrement }) => {
             .map(
                 (item, index) => {
                     const row = listRowHtmlElement.cloneNode(true).content.children[0];
-                    row.setAttribute("key", index);
+                    row.setAttribute("key", item.id);
                     row.querySelector("img").setAttribute("src", item.src);
                     row.querySelector("input").setAttribute("value", item.quantity);
                     row.querySelector(".name-and-description span:nth-child(1)").innerHTML = item.productName;
@@ -43,12 +43,12 @@ export const getOrderSummaryRender = ({ onVoucherCodeSubmit }) => {
         const summedUpPrices = sumProductPrices(items);
         const grandTotal = summedUpPrices - promotions;
         if (voucherProperties?.code) {
-            template.getElementById("promotion-holder").innerHTML = `<h5>${voucherProperties.code}<span>${promotions.toFixed(2)}$ OFF</span></h5>
-            <span>$${promotions.toFixed(2)}</span>`;
+            template.getElementById("promotion-holder").innerHTML = `<h5>${voucherProperties.code}</h5>
+            <span>${voucherProperties.isFreeShippingDiscount ? "Free shipping" : `$${promotions.toFixed(2)}`}</span>`;
         }
         template.getElementById("subtotal").innerHTML = `$${summedUpPrices}`;
-        template.getElementById("grand-total").innerHTML = `$${grandTotal <= 0 ? "0.00" : grandTotal.toFixed(2)}`;
-        template.getElementById("all-discounts").innerHTML = promotions ? `$${promotions.toFixed(2)}` : "$0.00";
+        template.getElementById("grand-total").innerHTML = `$${grandTotal.toFixed(2)}`;
+        template.getElementById("all-discounts").innerHTML = promotions ? `$${promotions.toFixed(2)}` : "n/a";
         const voucherValue = template.getElementById("voucher-code");
         template.getElementById("voucher-code-form").addEventListener("submit", event => {
             event.preventDefault();
@@ -63,18 +63,11 @@ export const getOrderSummaryRender = ({ onVoucherCodeSubmit }) => {
     return render;
 };
 
-export const displayErrorMessage = message => {
-    document.getElementById("promotion-holder").innerHTML = `<h5 id="error-message">${message}</h5>`;
-    document.getElementById("voucher-code-form").addEventListener("submit", event => {
-        event.preventDefault();
-    });
-    return false;
-};
-
 export const renderProductsFromStorage = products => {
     const htmlElement = document.querySelector(".summed-products");
     const summedProductsHtmlElement = document.querySelector(".summed-products-template");
     htmlElement.replaceChildren(...products.map((item, index) => {
+        if (item.quantity === 0) { return "" ;}
         const summedProductsTemplate = summedProductsHtmlElement.cloneNode(true).content.children[0];
         summedProductsTemplate.setAttribute("key", index);
         summedProductsTemplate.querySelector("img").setAttribute("src", item.src);
@@ -91,13 +84,25 @@ export const renderVoucherPropertiesFromStorage = (voucherProperties, products) 
     const discountsTemplate = discountsHtmlElement.cloneNode(true).content;
     const subtotal = sumProductPrices(products);
     const discountValue = discountsTemplate.querySelector(".discount-value span").innerHTML = `$${voucherProperties.amount / 100 || 0}`;
-    discountsTemplate.querySelector(".all-discounts span").innerHTML = voucherProperties.amount ? `$${voucherProperties.amount / 100}` : "Free shipping";
+    discountsTemplate.querySelector(".all-discounts span").innerHTML = voucherProperties.isFreeShippingDiscount ? "Free shipping" : `$${voucherProperties.amount / 100}`;
     discountsTemplate.querySelector(".subtotal span").innerHTML = `$${subtotal}`;
     discountsTemplate.querySelector(".coupon").innerHTML = `<span class="coupon-value">${voucherProperties.code}</span>`;
-    const shipping = discountsTemplate.querySelector(".shipping span").innerHTML = `${!voucherProperties.amount ? 0 : "$20"}`;
+    const shipping = discountsTemplate.querySelector(".shipping span").innerHTML = `${!voucherProperties.amount ? "$0" : "$20"}`;
     discountsTemplate.querySelector(".grand-total span").innerHTML = `$${(+shipping.replace("$", "") + +subtotal - discountValue.replace("$", "")).toFixed(2)}`;
     htmlElement.replaceChildren(discountsTemplate);
     return discountsTemplate;
+};
+
+export const displayErrorMessage = (message, voucherValue) => {
+    if (!voucherValue) {
+        document.querySelector(".voucher-form-error p").innerHTML = `${message}`;
+        return false;
+    }
+    document.querySelector(".error-holder").innerHTML = `<h5 id="error-message">${message}</h5>`;
+    document.getElementById("voucher-code-form").addEventListener("submit", event => {
+        event.preventDefault();
+    });
+    return false;
 };
 
 export const sumProductPrices = items => {
@@ -109,21 +114,33 @@ export const sumProductPrices = items => {
         .toFixed(2);
 };
 
-export const filterAndReduceItemsWithAmount = products => {
-    const items = products.filter(item => item.quantity !== 0).map(product => ({ sku_id: product.productName, quantity: product.quantity, price: parseFloat(product.price) * 100 }));
-    const amount = items.reduce((acc, product) => acc + product.quantity * product.price, 0);
-    return { items, amount };
+export const filterAndReduceProducts = products => {
+    const items = products.filter(item => item.quantity !== 0).map(product => ({ id: product.id, quantity: product.quantity }));
+    return { items };
 };
 
-export const getCartAndVoucherFromSessionStorage = () => {
+export const getDefaultItemsNameAndPrice = async () => {
+    const response = await fetch("/get-default-items", {
+        method : "POST",
+        headers: {
+            "Accept"      : "application/json",
+            "Content-Type": "application/json"
+        }
+    });
+    const data = await response.json();
+    return data;
+};
+
+export const getCartAndVoucherFromSessionStorage = async () => {
     const productsFromSessionStorage = JSON.parse(sessionStorage.getItem("products") || "[]");
     const voucherPropertiesFromSessionStorage = JSON.parse(sessionStorage.getItem("voucherProperties") || "{}");
-
+    const data = await getDefaultItemsNameAndPrice();
     return {
-        products         : productsFromSessionStorage.length ? productsFromSessionStorage : items,
+        products         : productsFromSessionStorage.length ? productsFromSessionStorage : data,
         voucherProperties: voucherPropertiesFromSessionStorage.code ? voucherPropertiesFromSessionStorage : {
-            amount: "",
-            code  : ""
+            amount                : "",
+            code                  : "",
+            isFreeShippingDiscount: false
         }
     };
 };
@@ -132,34 +149,3 @@ export const saveCartAndVoucherInSessioStorage = (items, voucherProperties) => {
     window.sessionStorage.setItem("products", JSON.stringify(items));
     window.sessionStorage.setItem("voucherProperties", JSON.stringify(voucherProperties));
 };
-
-export const items = [
-    {
-        productName       : "Johan & Nystrom Caravan",
-        productDescription: "20 oz bag",
-        quantity          : 1,
-        price             : "26.99",
-        src               : "./images/johan2.jpeg",
-    },
-    {
-        productName       : "Illy Arabica",
-        productDescription: "Bestseller 18 oz bag",
-        quantity          : 1,
-        price             : "21.02",
-        src               : "./images/illy_arabica.jpeg",
-    },
-    {
-        productName       : "Hard Beans Etiopia",
-        productDescription: "6 oz bag",
-        quantity          : 1,
-        price             : "3.88",
-        src               : "./images/hardbean.jpeg",
-    },
-    {
-        productName       : "Johan & Nystrom Bourbon",
-        productDescription: "20 oz bag",
-        quantity          : 2,
-        price             : "41.98",
-        src               : "./images/johan2.jpeg",
-    },
-];
