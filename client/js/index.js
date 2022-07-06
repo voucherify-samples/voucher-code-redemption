@@ -8,47 +8,49 @@ import {
     saveCartAndVoucherInSessioStorage
 } from "./lib.js";
 
-let products = [];
-let voucherProperties = [];
+const state = {
+    products         : [],
+    voucherProperties: {}
+};
 
 getCartAndVoucherFromSessionStorage().then(data => {
-    products = data.products;
-    voucherProperties = data.voucherProperties;
-    renderCartPreview(products);
-    renderOrderSummary(products, voucherProperties);
+    state.products = data.products;
+    state.voucherProperties = data.voucherProperties;
+    renderCartPreview(state.products);
+    renderOrderSummary(state.products, state.voucherProperties);
 });
 
 const onIncrement = async (index, render) => {
-    products[index].quantity++;
-    if (voucherProperties.code) {
+    state.products[index].quantity++;
+    if (state.voucherProperties.code) {
         try {
-            await validateAndUpdateVoucherProperties(voucherProperties.code, products);
+            await validateAndUpdateVoucherProperties(state.voucherProperties.code, state.products);
         } catch (error) {
             displayErrorMessage(error.message);
         }
     }
-    render(products);
-    renderOrderSummary(products, voucherProperties);
+    render(state.products);
+    renderOrderSummary(state.products, state.voucherProperties);
 };
 const onDecrement = async (index, render) => {
-    if (products[index].quantity <= 0) { return; }
-    products[index].quantity--;
-    if (voucherProperties.code) {
+    if (state.products[index].quantity <= 0) { return; }
+    state.products[index].quantity--;
+    if (state.voucherProperties.code) {
         try {
-            await validateAndUpdateVoucherProperties(voucherProperties.code, products);
+            await validateAndUpdateVoucherProperties(state.voucherProperties.code, state.products);
         } catch (error) {
             displayErrorMessage(error.message);
         }
     }
-    render(products);
-    renderOrderSummary(products, voucherProperties);
+    render(state.products);
+    renderOrderSummary(state.products, state.voucherProperties);
 };
 const renderCartPreview = getCartPreviewRender({ onIncrement, onDecrement });
 
 const onVoucherCodeSubmit = async (voucherValue, render) => {
     try {
-        await validateAndUpdateVoucherProperties(voucherValue, products);
-        render(products, voucherProperties);
+        await validateAndUpdateVoucherProperties(voucherValue, state.products);
+        render(state.products, state.voucherProperties);
     } catch (error) {
         displayErrorMessage(error.message, voucherValue);
     }
@@ -82,22 +84,22 @@ const validateAndUpdateVoucherProperties = async (code, products) => {
     const isFreeShipping = data.type === "UNIT" && data?.product?.name === "Shipping";
 
     if (!([ "AMOUNT", "PERCENT" ].includes(data.type) || isFreeShipping)) {
-        throw new Error("Implemented discounts: AMOUNT, PERCENT and FREE SHIPPING (on variation of UNIT type discount)");
+        throw new Error("Implemented discounts: AMOUNT, PERCENT and FREE SHIPPING (the variation of UNIT type discount)");
     }
 
-    voucherProperties.isFreeShippingDiscount = isFreeShipping;
-    voucherProperties.amount = isFreeShipping ? 0 : data.amount;
-    voucherProperties.code = data.code;
+    state.voucherProperties.isFreeShippingDiscount = isFreeShipping;
+    state.voucherProperties.amount = isFreeShipping ? 0 : data.amount;
+    state.voucherProperties.code = data.code;
 
     return data;
 };
 
 checkoutButton.addEventListener("click", e => {
-    if (!voucherProperties.code || products.reduce((a, b) => a + b.quantity, 0) <= 0) {
+    if (!state.voucherProperties.code || state.products.reduce((a, b) => a + b.quantity, 0) <= 0) {
         e.preventDefault();
         alert("Please validate voucher code or add items to basket");
         return false;
     }
-    saveCartAndVoucherInSessioStorage(products, voucherProperties);
+    saveCartAndVoucherInSessioStorage(state.products, state.voucherProperties);
     window.location.href = "/checkout.html";
 });

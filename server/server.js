@@ -28,18 +28,32 @@ app.post("/get-default-items", (req, res) => {
     return res.status(200).send(defaultItems);
 });
 
-const filterAndCalculateProductsAmount = products => {
-    const productsWithEqualIndex = defaultItems.filter(product => products.some(item => { return product.id === item.id; }));
-    productsWithEqualIndex.forEach((item, index) => { item.quantity = products[index].quantity; });
-    const items = productsWithEqualIndex.map(item => { return { sku_id: item.productName, price: item.price, quantity: item.quantity }; });
-    const amount = productsWithEqualIndex.reduce((sum, product) => sum + (product.price * product.quantity) * 100, 0).toFixed(2);
-    return { items, amount };
+const validateRequestedCart = requestedCart => {
+    if (!requestedCart || !requestedCart.length) {
+        throw new Error("Requested cart should be an array of cart items");
+    }
+
+    return requestedCart.map(requestedItem => {
+        const item = defaultItems.find(item => requestedItem?.id && item.id === requestedItem.id);
+        if (!item) {
+            return false;
+        }
+        return { ...item, quantity: requestedItem.quantity || 0 };
+    }).filter(item => !!item && item.quantity);
 };
+
+const mapCartItemToVoucherifyItem = item => ({
+    sku_id  : item.productName,
+    price   : item.price,
+    quantity: item.quantity
+});
+
+const calculateCartTotalAmount = items => items.reduce((sum, item) => sum + (item.price * item.quantity) * 100, 0).toFixed(2);
 
 app.post("/validate-voucher", asyncHandler(async (req, res) => {
     const voucherCode = req.body.code;
     const products = req.body.items;
-    const { items, amount } = filterAndCalculateProductsAmount(products);
+    const items = validateRequestedCart(products);
 
     if (!voucherCode) {
         return res.send({
@@ -47,14 +61,10 @@ app.post("/validate-voucher", asyncHandler(async (req, res) => {
         });
     }
 
-    if (!products.length) {
-        return res.send({
-            message: "Products are required"
-        });
-    }
-    const { valid, code, discount, campaign, order } = await client.validations.validateVoucher(voucherCode, { order: { amount, items } }).then(res => {
-        return res;
-    });
+    const { valid, code, discount, campaign, order } = await client.validations.validateVoucher(voucherCode, {
+        order: {
+            amount: calculateCartTotalAmount(items),
+            items : items.map(mapCartItemToVoucherifyItem) } });
 
     if (!valid) {
         return res.status(400).send({
@@ -77,14 +87,18 @@ app.post("/redeem-voucher", asyncHandler(async (req, res) => {
     const voucherCode = req.body.code;
     const products = req.body.items;
     const name = req.body.name;
-    const { items, amount } = filterAndCalculateProductsAmount(products);
+    const email = req.body.email;
+    const items = validateRequestedCart(products);
 
     if (!voucherCode) {
-        return res.send({
+        return res.status(400).send({
             message: "Voucher code is required"
         });
     }
-    const { result, voucher: { discount, campaign, code } } = await client.redemptions.redeem(voucherCode, { order: { items, amount }, customer: { name } });
+    const { result, voucher: { discount, campaign, code } } = await client.redemptions.redeem(voucherCode, {
+        order: {
+            items : items.map(mapCartItemToVoucherifyItem),
+            amount: calculateCartTotalAmount(items) }, customer: { name, email } });
     if (!result) {
         return res.status(400).send({
             status : "error",
@@ -106,7 +120,7 @@ app.listen(port, () => {
     console.log(`Hot beans app listening on port ${port}`);
 });
 
-let defaultItems = [
+const defaultItems = [
     {
         productName       : "Johan & Nystrom Caravan",
         productDescription: "20 oz bag",

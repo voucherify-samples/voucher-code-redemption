@@ -47,7 +47,7 @@ export const getOrderSummaryRender = ({ onVoucherCodeSubmit }) => {
             <span>${voucherProperties.isFreeShippingDiscount ? "Free shipping" : `$${promotions.toFixed(2)}`}</span>`;
         }
         template.getElementById("subtotal").innerHTML = `$${summedUpPrices}`;
-        template.getElementById("grand-total").innerHTML = `$${grandTotal.toFixed(2)}`;
+        template.getElementById("grand-total").innerHTML = `$${grandTotal <= 0 ? "0.00" : grandTotal.toFixed(2)}`;
         template.getElementById("all-discounts").innerHTML = promotions ? `$${promotions.toFixed(2)}` : "n/a";
         const voucherValue = template.getElementById("voucher-code");
         template.getElementById("voucher-code-form").addEventListener("submit", event => {
@@ -66,8 +66,7 @@ export const getOrderSummaryRender = ({ onVoucherCodeSubmit }) => {
 export const renderProductsFromStorage = products => {
     const htmlElement = document.querySelector(".summed-products");
     const summedProductsHtmlElement = document.querySelector(".summed-products-template");
-    htmlElement.replaceChildren(...products.map((item, index) => {
-        if (item.quantity === 0) { return "" ;}
+    htmlElement.replaceChildren(...products.filter(item => item.quantity).map((item, index) => {
         const summedProductsTemplate = summedProductsHtmlElement.cloneNode(true).content.children[0];
         summedProductsTemplate.setAttribute("key", index);
         summedProductsTemplate.querySelector("img").setAttribute("src", item.src);
