@@ -24,9 +24,18 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/check-credentials", asyncHandler(async (req, res) => {
+    try {
+        await client.vouchers.list();
+    } catch (error) {
+        return res.status(401).send({
+            status : "error",
+            message: "Your API credentials are incorrect, please check your applicationId and secretKey or visit `https://docs.voucherify.io/docs/authentication` to complete your app configuration."
+        });
+    }
+}));
+
 app.post("/get-default-items", (req, res) => {
-    const authHeader = req.headers.authorization;
-    console.log(authHeader)
     return res.status(200).send(defaultItems);
 });
 

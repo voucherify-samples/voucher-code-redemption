@@ -403,6 +403,7 @@ input::-webkit-inner-spin-button {
 .promotion-holder > div span:nth-child(2) {
   text-decoration: line-through;
   text-decoration-thickness: 2px;
+  text-align: right;
 }
 
 .error-holder {
