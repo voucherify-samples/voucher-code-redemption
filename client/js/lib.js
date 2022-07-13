@@ -44,7 +44,7 @@ export const getOrderSummaryRender = ({ onVoucherCodeSubmit }) => {
         const grandTotal = summedUpPrices - promotions;
         if (voucherProperties?.code) {
             template.getElementById("promotion-holder").innerHTML = `<h5>${voucherProperties.code}</h5>
-            <span>${voucherProperties.isFreeShippingDiscount ? "Free shipping" : `$${promotions.toFixed(2)}`}</span>`;
+            <div>${voucherProperties.isFreeShippingDiscount ? "<span>Free shipping</span><span>20$</span>" : `$${promotions.toFixed(2)}`}</div>`;
         }
         template.getElementById("subtotal").innerHTML = `$${summedUpPrices}`;
         template.getElementById("grand-total").innerHTML = `$${grandTotal <= 0 ? "0.00" : grandTotal.toFixed(2)}`;

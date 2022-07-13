@@ -25,6 +25,8 @@ app.use((req, res, next) => {
 });
 
 app.post("/get-default-items", (req, res) => {
+    const authHeader = req.headers.authorization;
+    console.log(authHeader)
     return res.status(200).send(defaultItems);
 });
 

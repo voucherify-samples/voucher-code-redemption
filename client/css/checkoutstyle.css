@@ -309,28 +309,10 @@ label > select {
     margin-top: 30px;
 }
 
-.value-discounts p, .value-discounts p span {
+.value-discounts p {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.value-discounts p:nth-of-type(1) {
-    flex: 2;
-    justify-content: flex-start;
-}
-
-.value-discounts p:nth-of-type(2), .value-discounts p:nth-of-type(3) {
-    flex: 1;
-    justify-content: flex-end;
-}
-
-.value-discounts p:nth-of-type(2) span, .value-discounts p:nth-of-type(3) span {
-    cursor: pointer;
-}
-
-.value-discounts p span {
-    margin-right: 9px;
 }
 
 .coupon {

@@ -387,15 +387,22 @@ input::-webkit-inner-spin-button {
   margin-right: 10px;
 }
 
-.promotion-holder h5 span {
+.promotion-holder h5 div {
   font-weight: 400;
   padding-left: 10px;
 }
 
-.promotion-holder > span {
+.promotion-holder > div {
+  display: flex;
+  flex-direction: column;
   font-weight: 600;
   font-size: 16px;
   color: #3c8a3c;
+}
+
+.promotion-holder > div span:nth-child(2) {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
 }
 
 .error-holder {
