@@ -28,6 +28,8 @@ Note: while calling the [redemption endpoint](https://docs.voucherify.io/referen
 Live demo on:<br>
 [<img src="https://cdn.icon-icons.com/icons2/2699/PNG/512/heroku_logo_icon_169035.png" width="100px"/>](https://v-voucher-code-redemption.herokuapp.com/)
 
+![](https://github.com/voucherify-samples/voucher-code-redemption/blob/main/free_shipping.gif)
+
 The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/testing). Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
 
 ``FREE-SHIPPING`` - You find it in your [Vouchers](https://docs.voucherify.io/docs/vouchers-1) dashboard but if there is not Free Shipping Voucher you have to create code with free shipping on [Sandbox](https://docs.voucherify.io/docs/free-shipping-discount)
