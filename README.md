@@ -1,8 +1,9 @@
 1. [About Voucherify Example](#voucherify-example)
 2. [How Voucherify works](#voucherify-works)
-3. [Quickstart](#quickstart)
-4. [How to run Voucherify samples locally](#voucherify-locally)
-5. [Get support](#support)
+3. [Demo](#demo)
+4. [Quickstart](#quickstart)
+5. [How to run Voucherify samples locally](#voucherify-locally)
+6. [Get support](#support)
 
 
 # Redeem promo codes with Voucherify <a id="voucherify-example"></a>
@@ -22,7 +23,7 @@ Note: while calling the [redemption endpoint](https://docs.voucherify.io/referen
 
 ![](https://github.com/voucherify-samples/voucher-code-redemption/blob/refactor-code/voucherify-integration.png)
 
-## Demo
+## Demo <a id="demo"></a>
 
 Live demo on:<br>
 [<img src="https://cdn.icon-icons.com/icons2/2699/PNG/512/heroku_logo_icon_169035.png" width="100px"/>](https://v-voucher-code-redemption.herokuapp.com/)
