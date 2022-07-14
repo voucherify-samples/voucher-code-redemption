@@ -28,6 +28,5 @@
     "prepare": "husky install",
     "start": "node server/server.js",
     "dev": "nodemon server/server.js"
-  },
-  "stack": "heroku-22"
+  }
 }
