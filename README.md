@@ -66,7 +66,7 @@ VOUCHERIFY_SECRET_KEY=<replace-with-your-secret-key>
 ```
 5. Install dependencies.
 ```
-npm install
+npm install / yarn install
 ```
 6. Start the Node server by entering one of the commands in the terminal.
 ```
