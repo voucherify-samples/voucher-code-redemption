@@ -72,7 +72,7 @@ npm install / yarn install
 ```
 6. Start the Node server by entering one of the commands in the terminal.
 ```
-npm run start / npm run dev
+npm run start / npm run dev || yarn start / yarn run dev 
 ```
 7. Go to [http://localhost:3000](http://localhost:3000/) in your browser.
 
