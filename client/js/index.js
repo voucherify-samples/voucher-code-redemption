@@ -57,22 +57,6 @@ const onVoucherCodeSubmit = async (voucherValue, render) => {
 };
 const renderOrderSummary = getOrderSummaryRender({ onVoucherCodeSubmit });
 
-const checkCredentials = async () => {
-    const response = await fetch("/check-credentials", {
-        method : "GET",
-        headers: {
-            "Accept"      : "application/json",
-            "Content-Type": "application/json",
-        }
-    });
-
-    const data = await response.json();
-    if (response.status !== 200) {
-        alert(data.message)
-    }
-};
-checkCredentials();
-
 const validateAndUpdateVoucherProperties = async (code, products) => {
     if (!code) {
         throw new Error("Please enter voucher code");
