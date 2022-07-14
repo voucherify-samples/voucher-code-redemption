@@ -24,7 +24,8 @@ Note: while calling the [redemption endpoint](https://docs.voucherify.io/referen
 
 ## Demo
 
-[Live demo](https://v-voucher-code-redemption.herokuapp.com/)
+Live demo on:<br>
+[<img src="https://cdn.icon-icons.com/icons2/2699/PNG/512/heroku_logo_icon_169035.png" width="100px"/>](https://v-voucher-code-redemption.herokuapp.com/)
 
 The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/testing). Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
 
