@@ -426,6 +426,7 @@ input::-webkit-inner-spin-button {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   padding: 20px;
   width: 100%;
   background: #f7f8fa;
@@ -554,13 +555,6 @@ input::-webkit-inner-spin-button {
   background-image: url("../images/LinkedIn.svg");
 }
 
-.copyright-holder {
-  align-self: bottom;
-  margin-top: 50px;
-  font-size: 12px;
-  color: #6c7594;
-}
-
 #error-message {
   padding: 8px 16px;
   border-radius: 5px;
@@ -575,4 +569,22 @@ input::-webkit-inner-spin-button {
   z-index: 999;
   background-color: white;
   color: black;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 50px;
+  font-size: 12px;
+}
+
+.copyright-holder {
+  color: #6c7594;
+}
+
+#repo-link {
+  text-align: right;
+  text-decoration: none;
 }
