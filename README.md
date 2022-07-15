@@ -1,8 +1,9 @@
 1. [About Voucherify Example](#voucherify-example)
 2. [How Voucherify works](#voucherify-works)
-3. [Quickstart](#quickstart)
-4. [How to run Voucherify samples locally](#voucherify-locally)
-5. [Get support](#support)
+3. [Demo](#demo)
+4. [Quickstart](#quickstart)
+5. [How to run Voucherify samples locally](#voucherify-locally)
+6. [Get support](#support)
 
 
 # Redeem promo codes with Voucherify <a id="voucherify-example"></a>
@@ -22,9 +23,12 @@ Note: while calling the [redemption endpoint](https://docs.voucherify.io/referen
 
 ![](https://github.com/voucherify-samples/voucher-code-redemption/blob/refactor-code/voucherify-integration.png)
 
-## Demo
+## Demo <a id="demo"></a>
 
-[Live demo](https://voucherify-code-redemption.herokuapp.com/)
+Live demo on:<br>
+[<img src="https://cdn.icon-icons.com/icons2/2699/PNG/512/heroku_logo_icon_169035.png" width="100px"/>](https://v-voucher-code-redemption.herokuapp.com/)
+
+![](https://github.com/voucherify-samples/voucher-code-redemption/blob/main/free_shipping.gif)
 
 The demo is running with a [Sandbox project](https://docs.voucherify.io/docs/testing). Sandbox comes with several test vouchers you can apply in the checkout, e.g.:
 
@@ -66,11 +70,11 @@ VOUCHERIFY_SECRET_KEY=<replace-with-your-secret-key>
 ```
 5. Install dependencies.
 ```
-npm install
+npm install / yarn install
 ```
 6. Start the Node server by entering one of the commands in the terminal.
 ```
-npm run start / npm run dev
+npm run start / npm run dev || yarn start / yarn run dev 
 ```
 7. Go to [http://localhost:3000](http://localhost:3000/) in your browser.
 
